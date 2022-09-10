@@ -14,19 +14,26 @@ print("Hourly Quakes: ", hourly_quakes )
 
 for i in range(hourly_quakes):
     properties = rep_json['features'][i]['properties']
+    full_location = properties['place']
+    city = ''
+    country = ''
+    print(full_location)
+    if full_location:
+        of = full_location.find("of")
+        of += 3 # offset to get to city
+        comma = full_location.find(",")
+        distance_km = full_location[:of] # gets distance from location
+        city = full_location[of:comma]
+        country = full_location[comma+2::]
     location = rep_json['features'][i]['geometry']['coordinates'] # long, lat, depth
-    print(location)
     mag = properties['mag']
     # print(mag)
-    city = 21  # Todo: Extract city from response
     time = properties['time']
     updated = properties['updated']
     detail = properties['detail']
     longitude = location[0]
     latitude = location[1]
     depth = location[2]
-    print(longitude, latitude, depth)
-    country = 'US'  # TODO: Extract country from response
     id = rep_json['features'][i]['id']
     # db_manager.insert_mag(mag)
     db_manager.insert_quake(mag, city, time, updated, detail, longitude, latitude, depth, country, id)
