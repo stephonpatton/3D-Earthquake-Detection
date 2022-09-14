@@ -6,10 +6,6 @@ import db_manager
 # TODO: Implement geocode API using long/lat data from usgs API response
 # hourly_api = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"
 hourly_api = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2022-01-01&endtime=2022-02-01"
-geocode = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location=-80.7085%2C34.1653333"
-geo_resposne = requests.get(geocode)
-geo_json = geo_resposne.json()
-print(geo_json)
 response = requests.get(hourly_api)
 rep_json = response.json()
 print(rep_json)
@@ -31,10 +27,12 @@ for i in range(hourly_quakes):
         comma = full_location.find(",")
         distance_km = full_location[:of] # gets distance from location
         city = full_location[of:comma]
+        print("CITY: ", city)
         country = full_location[comma+2::]
     else:
         print("This one does not contain of ")
         count += 1
+        continue
     location = rep_json['features'][i]['geometry']['coordinates'] # long, lat, depth
     mag = properties['mag']
     # print(mag)
@@ -53,3 +51,13 @@ for i in range(hourly_quakes):
 
 # db_manager.select_rows()
 db_manager.close_connection()
+
+
+# TODO: See if there is a more optimal way to do this
+# TODO: Possibilities here: Remove the ones that do not have of or find out how to parse them without the comma being provided. Seems like Alaska is the issue here.
+# geocode = f"https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location={longitude}%2C{latitude}"
+# geo_response = requests.get(geocode)
+# geo_json = geo_response.json()
+# print(geo_json)
+# city = geo_json['address']['City']
+# print("CITY: ", city)
