@@ -2,8 +2,6 @@ import requests
 
 import db_manager
 
-
-# TODO: Implement geocode API using long/lat data from usgs API response
 # hourly_api = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson"
 hourly_api = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2022-01-01&endtime=2022-02-01"
 response = requests.get(hourly_api)
@@ -52,7 +50,7 @@ for i in range(hourly_quakes):
 # db_manager.select_rows()
 db_manager.close_connection()
 
-
+# TODO: Figure out GlobeGL situation tomorrow
 # TODO: See if there is a more optimal way to do this
 # TODO: Possibilities here: Remove the ones that do not have of or find out how to parse them without the comma being provided. Seems like Alaska is the issue here.
 # geocode = f"https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&featureTypes=&location={longitude}%2C{latitude}"
